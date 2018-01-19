@@ -1,4 +1,4 @@
-from update import psrcsv, updating, getvidlst,getOffspring,moving,getaudios,getAllchild,AudiosetStart,get_video
+from update import psrcsv, updating, getvidlst,getOffspring,moving,getaudios,getAllchild,AudiosetStart,get_video,getSegment
 import cPickle as cp
 import commands
 import os
@@ -52,24 +52,28 @@ with open("/media/zeng/F65C985C5C981A07/zengdonghuo/doc/singsing.pkl","w") as f:
     cp.dump(dicts, f)
     f.close()
 ######################################34242432#############################################
-fullvideo = "/home/zeng/Audioset/videoset/fullvideo/"
-orignal = '/home/zeng/Audioset/videoset/video'
+tempfull = "/home/zeng/Audioset/videoset/fullvideo/"
+tempaudio = "/home/zeng/Audioset/videoset/fullaudio/"
+orignal = '/home/zeng/Audioset/videoset/video/'
 lists = getvidlst(orignal) ## get all existed video
 video_lst = dict1s.keys()
 candlst = list(set(video_lst).difference(set(lists)))
-get_video(candlst, fullvideo) ## get full time video from youtube
+get_video(candlst, tempfull) ## get full time video from youtube
 vid_se_dict = {}
 for _item in candlst:
     vid_se_dict[_item]=vid_startend_dict[_item]## get the start and end time
     
-getSegment(vid_se_dict, fullvideo, videofile) ## extract 10 sec segment
-
+getSegment(vid_se_dict, fullvideo, orignal) ## extract 10 sec segment
+##out=['-W5c6CeUMPE', '-COelgvUEW4', '-ECK_BisOLM', '-24dqQM_rDk', '-r2-9oyIzkQ', '-IvJaK7HLtQ', '-nQ9a0P1TlY', '-CniGkDLq-Y', '-EVRXQpt1-8', '-F8ZP9sXcKM', '-lK6DOYxQ6s', '-K1BRF6qng8', '-9phJ0sJrXg', '-tpq_bzSKes', '-JfpacjZWyw', '-TvUb8THUq4']
 audio_path ="/media/zeng/F65C985C5C981A07/zengdonghuo/Audio/Singing/"
-root = '/media/zeng/F65C985C5C981A07/zengdonghuo/Video/Singing/'
-for item in clas:
-    item = item.replace(" ", "_")
-    print len(globals()[item+"_dict"])
-    video_target = root+item
-    moving(orignal,  root, globals()[item+"_dict"])
+video_path = '/media/zeng/F65C985C5C981A07/zengdonghuo/Video/Singing/'
 
-getaudios(root, audio_path)
+for item in clas:
+    items = item.replace(" ", "_")
+    print len(globals()[items+"_dict"])
+    dicts = globals()[items+"_dict"]
+    target = video_path+items
+    print target
+    moving(orignal, target, dicts)
+
+getaudios(video_path, audio_path)
